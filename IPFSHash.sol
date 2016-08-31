@@ -1,16 +1,15 @@
 contract IPFSVerify {
     // prefix 0a then the length of the unixfs message then 080212
-    bytes merkledagprefix = hex"0a";
-    bytes unixfsprefix = hex"080212";
+    bytes prefix1 = hex"0a";
+    bytes prefix2 = hex"080212";
     bytes postfix = hex"18";
 
     function verifyHash(string contentString) returns (bytes32) {
         bytes memory content = bytes(contentString);
         bytes memory len = to_binary(content.length);
-        // 06 + content byte length
-        bytes memory messagelen = to_binary(6 + content.length);
+        bytes memory len2 = to_binary(6 + content.length);
         //return sha256 hash of the protobuf message;
-        return sha256(merkledagprefix, messagelen, unixfsprefix, len, content, postfix, len);
+        return sha256(prefix1, len2, prefix2, len, content, postfix, len);
     }
     
     function concat(bytes byteArray, bytes byteArray2) returns (bytes) {
